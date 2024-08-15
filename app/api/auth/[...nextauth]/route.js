@@ -8,7 +8,7 @@ const handler = NextAuth({
             clientId:'',
             clientSecret:''
         })
-    ],
+    ], 
     async session ({session}) {
 
     },
