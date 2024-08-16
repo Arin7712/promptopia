@@ -12,14 +12,17 @@ const handler = NextAuth({
     })
   ],
   callbacks: {
-    async signIn({user, account}) {
-
-        console.log("op", user);
-        console.log(account)
-        return user;
-
-
-    }}
+    async signIn({ user, account }) {
+      if (!user || !account) {
+        console.error("SignIn callback missing user or account");
+        return false;
+      }
+      console.log("SignIn Callback Triggered");
+      console.log("User:", user);
+      console.log("Account:", account);
+      return true;
+    }
+  }
 })
 
 export { handler as GET, handler as POST }
