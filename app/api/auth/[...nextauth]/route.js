@@ -27,7 +27,7 @@ const handler = NextAuth({
                     throw new Error('User not found');
                 }
 
-                session.user.id = session._id.toString();
+                session.user.id = sessionUser._id.toString();
                 return session;
             } catch (error) {
                 console.log('Session callback error:', error);
