@@ -16,6 +16,7 @@ const handler = NextAuth({
     async signIn({ account, profile, user, credentials }) {
       try {
         // You can add any sign-in logic here if needed
+        console.log('fk')
         return true;
       } catch (error) {
         console.log("Error during sign-in: ", error.message);
