@@ -17,49 +17,24 @@ const handler = NextAuth({
     ], 
 
     callbacks: {
-        async session({ session }) {
-            try {
-                const sessionUser = await User.findOne({
-                    email: session.user.email,
-                });
-
-                if (!sessionUser) {
-                    throw new Error('User not found');
-                }
-
-                session.user.id = sessionUser._id.toString();
-                return session;
-            } catch (error) {
-                console.log('Session callback error:', error);
-                return null; // Return null if there's an error
-            }
-        },
-
         async signIn({ profile }) {
             try {
                 await connectToDB();
-                console.log('Database connection successful');
-
-                // Check if a user already exists
-                const userExists = await User.findOne({
-                    email: profile.email,
-                });
-
-                // If not, create a new user
+    
+                const userExists = await User.findOne({ email: profile.email });
                 if (!userExists) {
                     await User.create({
                         email: profile.email,
-                        username: profile.name.replace(' ', '').toLowerCase(), // Removed extra space
+                        username: profile.name.replace(' ', '').toLowerCase(),
                         image: profile.picture,
                     });
                 }
-
                 return true;
             } catch (error) {
-                console.log('Sign-in callback error:', error);
+                console.log('SignIn callback error:', error);
                 return false;
             }
-        }
+        },
     }
 });
 
