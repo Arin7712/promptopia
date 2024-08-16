@@ -13,10 +13,19 @@ const handler = NextAuth({
   ],
   callbacks: {
     async signIn({ user, account }) {
-      if (!user || !account) {
-        console.error("SignIn callback missing user or account");
-        return false;
-      }
+
+      const userExists = await User.findOne({ email: profile.email });
+
+        // if not, create a new document and save user in MongoDB
+        
+        if (!userExists) {
+          await User.create({
+            email: profile.email,
+            username: profile.name.replace(" ", "").toLowerCase(),
+            image: profile.picture,
+          });
+        }
+
       console.log("SignIn Callback Triggered");
       console.log("User:", user);
       console.log("Account:", account);
