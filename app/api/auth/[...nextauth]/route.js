@@ -14,7 +14,7 @@ const handler = NextAuth({
   callback: {
     async signIn({user, account}) {
 
-        console.log(user);
+        console.log("op", user);
         console.log(account)
         return user;
 
