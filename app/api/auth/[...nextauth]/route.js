@@ -10,18 +10,31 @@ const handler = NextAuth({
   ],
   callbacks: {
     async session({ session }) {
-      // You can add any session logic here if needed
-      console.log('fkas');
+      // store the user id from MongoDB to session
+      const sessionUser = await User.findOne({ email: session.user.email });
+      session.user.id = sessionUser._id.toString();
       return session;
     },
     async signIn({ account, profile, user, credentials }) {
       try {
-        // You can add any sign-in logic here if needed
-        console.log('fk');
-        return true;
+        await connectToDB();
+
+        // check if user already exists
+        const userExists = await user.findOne({ email: profile.email });
+
+        // if not, create a new document and save user in MongoDB
+        if (!userExists) {
+          await user.create({
+            email: profile.email,
+            username: profile.name.replace(" ", "").toLowerCase(),
+            image: profile.picture,
+          });
+        }
+
+        return true
       } catch (error) {
-        console.log("Error during sign-in: ", error.message);
-        return false;
+        console.log("Error checking if user exists: ", error.message);
+        return false
       }
     },
   }
